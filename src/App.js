@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import './App.css';
+// import './App.css'; // Moved some of it to the index.css
 import Header from './Header'
 import Content from './Content'
 import Footer from './Footer'
