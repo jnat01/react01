@@ -1,18 +1,26 @@
-import React from 'react'
+import {React, useState} from 'react'
 
 const Content = () => {
+  const [name, setName] = useState('Ricky')
+  const [count, setCount] = useState(0)
+
   const handleNameChange = () => {
     const names = ['Bob', 'Dave', 'Jim']
     const int = Math.floor(Math.random() * 3)
-    return names[int]
+    setName(names[int])
   }
 
   const handleClick = () => {
-    console.log('you clicked it')
+    setCount(count + 1) 
+    /**
+     *  current value of state enters the function, even if you use a setter
+     *  the value of the currentState is what is logged
+     * */  
+    console.log(count)
   }
 
-  const handleClick2 = (name) => {
-    console.log(`hello ${name}`)
+  const handleClick2 = () => {
+    console.log(count)
   }
 
   const handleClick3 = (e) => {
@@ -22,10 +30,16 @@ const Content = () => {
   return (
     <main>
       <p onDoubleClick={handleClick}>
-        Hello { handleNameChange() }
+        Hello { name } { count }
       </p>
-      <button onClick={() => handleClick2('Foo')}>
-        Click it 2
+      <button onClick={handleNameChange}>
+        Change Name
+      </button>
+      <button onClick={handleClick}>
+        Check Count
+      </button>
+      <button onClick={handleClick2}>
+        handleClick2
       </button>
       <button onClick={(e) => handleClick3(e)}>
         Click it 3
