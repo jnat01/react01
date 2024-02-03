@@ -44,7 +44,7 @@ main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   overflow-y: auto;
 }
@@ -54,8 +54,9 @@ footer {
   padding: 0.25em;
   background-color: mediumblue;
   color: aliceblue;
-  display: grid;
-  place-content: center;
+  display: flex;
+  justify-content: space-between;
+  /* place-content: center; */
 }
 
 ul {
