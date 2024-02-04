@@ -2,6 +2,7 @@
 // import './App.css'; // Moved some of it to the index.css
 import { React, useState } from 'react'
 import Header from './Header'
+import AddItem from './AddItem'
 import Content from './Content'
 import Footer from './Footer'
 
@@ -23,26 +24,58 @@ function App() {
       item: 'item 3'
     },
   ])
+  const [newItem, setNewItem] = useState('')
+
+  const setAndSaveItems = (newItems) => {
+    setItems(newItems)
+    localStorage.setItem('shoppingList', JSON.stringify(newItems))
+  }
+
+  const addItem = (item) => {
+    const id = items.reduce((acc, item) =>
+      item.id > acc.id ? item : acc
+    ).id + 1
+
+    const myNewItem = {
+      id,
+      item,
+      checked: false,
+    }
+
+    setAndSaveItems([...items, myNewItem])
+  }
 
   const handleCheck = (id) => {
     const listItems = items.map((item) =>
       item.id === id ? { ...item, checked: !item.checked } : item
     )
-    setItems(listItems)
-    localStorage.setItem('shoppingList', JSON.stringify(listItems))
+
+    setAndSaveItems(listItems)
   }
 
   const handleDelete = (id) => {
     const listItems = items.filter((item) => item.id !== id)
     
-    setItems(listItems)
-    localStorage.setItem('shoppingList', JSON.stringify(listItems))
+    setAndSaveItems(listItems)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!newItem) return
+
+    addItem(newItem)
+    setNewItem('')
   }
 
   return (
     <div className="App">
       <Header
         title='Grocery List'
+      />
+      <AddItem
+        newItem={newItem}
+        setNewItem={setNewItem}
+        handleSubmit={handleSubmit}
       />
       <Content
         items={items}

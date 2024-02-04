@@ -25,6 +25,7 @@ const LineItem = ({
         onClick={() => handleDelete(item.id)}
         aria-label={`Delete ${item.item}`}
       />
+      { item.id }
     </li>
   )
 }
