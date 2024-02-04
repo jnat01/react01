@@ -7,23 +7,7 @@ import Content from './Content'
 import Footer from './Footer'
 
 function App() {
-  const [items, setItems] = useState([
-    {
-      id: 1, 
-      checked: false,
-      item: 'item 1'
-    },
-    {
-      id: 2, 
-      checked: false,
-      item: 'item 2'
-    },
-    {
-      id: 3, 
-      checked: false,
-      item: 'item 3'
-    },
-  ])
+  const [items, setItems] = useState(JSON.parse(localStorage.getItem('shoppingList')))
   const [newItem, setNewItem] = useState('')
 
   const setAndSaveItems = (newItems) => {
@@ -32,9 +16,15 @@ function App() {
   }
 
   const addItem = (item) => {
-    const id = items.reduce((acc, item) =>
-      item.id > acc.id ? item : acc
-    ).id + 1
+    let id
+
+    if (!items.length) {
+      id = 1
+    } else {
+      id = items.reduce((acc, item) =>
+        item.id > acc.id ? item : acc
+      ).id + 1
+    }
 
     const myNewItem = {
       id,
