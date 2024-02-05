@@ -7,7 +7,7 @@ const Content = ({
   handleDelete,
 }) => {
   return (
-    <main>
+    <>
       {items.length ? (
         <ItemList
           items={items}
@@ -19,7 +19,7 @@ const Content = ({
           Nothing on your list
         </div>
       )}
-    </main>
+    </>
   )
 }
 
