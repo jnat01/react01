@@ -6,6 +6,7 @@ import SearchItem from './SearchItem'
 import AddItem from './AddItem'
 import Content from './Content'
 import Footer from './Footer'
+import apiRequest from './apiRequest'
 
 function App() {
   const API_URL = 'http://localhost:3500/items'
@@ -22,7 +23,6 @@ function App() {
         const response = await fetch(API_URL)
         if (!response.ok) throw Error('Did not receive expected data')
         const listItems = await response.json()
-        console.log(listItems)
         setItems(listItems)
         setFetchError(null)
       } catch(err) {
@@ -36,41 +36,64 @@ function App() {
     // you wouldn't do this in actual implementation
     setTimeout(() => {
       fetchItems()
-    }, 2000)
+    }, 500)
   }, [])
 
-  const addItem = (item) => {
+  const addItem = async (item) => {
     let id
-
     if (!items.length) {
       id = 1
     } else {
-      id = items.reduce((acc, item) =>
+      const currentId = items.reduce((acc, item) =>
         item.id > acc.id ? item : acc
-      ).id + 1
+      ).id
+      id = JSON.stringify(parseFloat(currentId) + 1)
     }
-
     const myNewItem = {
       id,
       item,
       checked: false,
     }
-
     setItems([...items, myNewItem])
+
+    const postOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(myNewItem)
+    }
+    const result = await apiRequest(API_URL, postOptions)
+    if (result) setFetchError(result)
   }
 
-  const handleCheck = (id) => {
+  const handleCheck = async (id) => {
     const listItems = items.map((item) =>
       item.id === id ? { ...item, checked: !item.checked } : item
     )
-
     setItems(listItems)
+
+    const myItem = listItems.filter((item) => item.id === id)
+    const updateOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ checked: myItem[0].checked })
+    }
+    const reqUrl = `${API_URL}/${id}`
+    const result = await apiRequest(reqUrl, updateOptions)
+    if (result) setFetchError(result)
   }
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const listItems = items.filter((item) => item.id !== id)
-    
     setItems(listItems)
+
+    const deleteOptions = { method: 'DELETE' }
+    const reqUrl = `${API_URL}/${id}`
+    const result = await apiRequest(reqUrl, deleteOptions)
+    if (result) setFetchError(result)
   }
 
   const handleSubmit = (e) => {
